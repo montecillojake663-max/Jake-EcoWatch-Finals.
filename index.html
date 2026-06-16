@@ -1,3 +1,4 @@
+``html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,358 +7,1535 @@
 <title>EcoWatch — Community Pollution Reporter</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <style>
-  :root {
-    --eco-dark: #1b5e3b;
-    --eco-mid: #2e7d52;
-    --eco-light: #e8f5e9;
-    --eco-pale: #f0f7f4;
-    --color-text-secondary: #555;
-    --color-background-primary: #fff;
-    --font-sans: Arial, sans-serif;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: var(--font-sans); background: var(--eco-pale); }
+:root {
+  --eco-dark: #1b5e3b;
+  --eco-mid: #2e7d52;
+  --eco-light: #e8f5e9;
+  --eco-pale: #f0f7f4;
+  --eco-bg: #f5f0eb;
+  --text-sec: #666;
+  --border: rgba(0,0,0,.08);
+}
+{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial,sans-serif;background:var(--eco-pale);overflow:hidden;}
 
-  #ecoapp {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-    min-height: 500px;
-    overflow: hidden;
-  }
+/ ── APP SHELL ── /
+#app{display:flex;height:100vh;width:100vw;overflow:hidden;}
 
-  /* SIDEBAR */
-  #sidebar {
-    width: 240px;
-    min-width: 240px;
-    background: var(--eco-dark);
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 16px;
-    transition: all 0.3s;
-    overflow: hidden;
-  }
-  .logo { font-size: 17px; font-weight: 500; line-height: 1.2; }
-  .logo small { display: block; font-size: 11px; opacity: .65; margin-top: 2px; }
-  .user-card {
-    margin-top: 18px;
-    display: flex; gap: 10px; align-items: center;
-    background: rgba(255,255,255,.1);
-    padding: 10px; border-radius: 10px;
-  }
-  .avatar {
-    width: 36px; height: 36px;
-    background: rgba(255,255,255,.2);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-  }
-  .user-name { font-size: 13px; font-weight: 500; }
-  .user-loc { font-size: 10px; opacity: .65; }
-  .sidebar-nav { margin-top: 18px; display: flex; flex-direction: column; gap: 4px; }
-  .nav-btn {
-    background: transparent; border: none; color: #fff;
-    text-align: left; padding: 9px 10px;
-    border-radius: 8px; cursor: pointer;
-    font-size: 13px; display: flex; align-items: center; gap: 8px;
-    transition: background 0.15s;
-  }
-  .nav-btn:hover, .nav-btn.active { background: rgba(255,255,255,.15); }
-  .sidebar-foot { margin-top: auto; font-size: 10px; opacity: .5; }
+/ ── SIDEBAR ── /
+#sidebar{
+  width:200px;min-width:200px;
+  background:var(--eco-dark);color:#fff;
+  display:flex;flex-direction:column;padding:18px 14px;
+  transition:.3s;overflow:hidden;flex-shrink:0;
+}
+.logo{font-size:16px;font-weight:600;display:flex;align-items:center;gap:6px;cursor:pointer;}
+.logo small{display:block;font-size:10px;opacity:.6;margin-top:2px;font-weight:400;}
+.user-card{
+  margin-top:16px;display:flex;gap:8px;align-items:center;
+  background:rgba(255,255,255,.1);padding:9px;border-radius:10px;
+  cursor:pointer;transition:background .15s;
+}
+.user-card:hover{background:rgba(255,255,255,.18);}
+.s-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;
+}
+.s-name{font-size:12px;font-weight:600;}
+.s-loc{font-size:9px;opacity:.6;}
+.s-nav{margin-top:16px;display:flex;flex-direction:column;gap:3px;}
+.s-btn{
+  background:transparent;border:none;color:#fff;
+  text-align:left;padding:9px 10px;border-radius:8px;
+  cursor:pointer;font-size:12px;display:flex;align-items:center;gap:8px;
+  transition:background .15s;width:100%;
+}
+.s-btn:hover,.s-btn.active{background:rgba(255,255,255,.18);}
+.s-btn i{font-size:18px;}
+.s-foot{margin-top:auto;font-size:9px;opacity:.45;}
 
-  /* MAIN AREA */
-  #main {
-    flex: 1;
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-    overflow: hidden;
-    background: var(--eco-pale);
-  }
+/ ── MAIN ── /
+#main{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--eco-pale);}
 
-  /* PHONE SHELL (desktop) */
-  #phone-shell {
-    width: 390px;
-    max-width: 100%;
-    background: #fff;
-    border-radius: 20px;
-    margin: 16px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    box-shadow: 0 0 0 0.5px rgba(0,0,0,.12);
-  }
+/ ── PHONE SHELL ── /
+#phone{
+  width:420px;max-width:100%;height:calc(100vh - 32px);
+  background:#fff;border-radius:20px;margin:16px;
+  display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 0 0 .5px rgba(0,0,0,.12);
+}
 
-  /* TOP HEADER */
-  .app-header {
-    background: var(--eco-dark);
-    color: #fff;
-    padding: 14px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-shrink: 0;
-  }
-  .app-header .greet { font-size: 12px; opacity: .75; }
-  .app-header .name { font-size: 15px; font-weight: 500; }
+/ ── SCREENS ── /
+.screen{display:none;flex:1;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
 
-  /* MAP */
-  .map-box {
-    margin: 10px;
-    height: 160px;
-    background: #c8e6c9;
-    border-radius: 12px;
-    position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-  .map-grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(to right, rgba(255,255,255,.3) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,.3) 1px, transparent 1px);
-    background-size: 28px 28px;
-  }
-  .map-label {
-    position: absolute; top: 8px; left: 10px;
-    background: var(--eco-dark); color: #fff;
-    font-size: 10px; padding: 2px 8px; border-radius: 20px;
-  }
-  .pin {
-    width: 14px; height: 14px; border-radius: 50%;
-    position: absolute; border: 2px solid #fff;
-  }
+/ ── GREEN HEADER ── /
+.g-header{
+  background:var(--eco-dark);color:#fff;
+  padding:14px 16px;flex-shrink:0;
+}
+.g-header-row{display:flex;justify-content:space-between;align-items:center;}
+.g-title{font-size:16px;font-weight:600;text-align:center;flex:1;}
+.g-icons{display:flex;gap:12px;font-size:20px;}
+.g-icons i{cursor:pointer;transition:opacity .15s;}
+.g-icons i:hover{opacity:.7;}
 
-  /* STATS */
-  .stats-row {
-    display: flex; gap: 8px; padding: 0 10px 8px;
-    flex-shrink: 0;
-  }
-  .stat-card {
-    flex: 1; background: var(--eco-pale);
-    border-radius: 10px; padding: 8px 6px;
-    text-align: center;
-    border: 0.5px solid rgba(0,0,0,.07);
-  }
-  .stat-num { font-size: 20px; font-weight: 500; color: var(--eco-dark); }
-  .stat-lbl { font-size: 11px; color: var(--color-text-secondary); }
+/ ── SCROLL BODY ── /
+.s-body{flex:1;overflow-y:auto;padding:12px;}
+.s-body::-webkit-scrollbar{width:3px;}
+.s-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;}
 
-  /* REPORT CARDS */
-  .scroll-area {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 10px 6px;
-  }
-  .section-title {
-    font-size: 12px; font-weight: 500;
-    color: var(--color-text-secondary);
-    margin: 4px 0 8px;
-    text-transform: uppercase; letter-spacing: .04em;
-  }
-  .report-card {
-    display: flex; gap: 10px; align-items: center;
-    padding: 10px 12px;
-    background: #fff;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    border: 0.5px solid rgba(0,0,0,.07);
-  }
-  .report-icon {
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
-  }
-  .report-title { font-size: 13px; font-weight: 500; }
-  .report-sub { font-size: 11px; color: var(--color-text-secondary); }
-  .badge {
-    margin-left: auto;
-    font-size: 10px; padding: 2px 8px; border-radius: 20px;
-    white-space: nowrap; font-weight: 500;
-  }
-  .badge-pending { background: #fff3cd; color: #856404; }
-  .badge-review  { background: #cfe2ff; color: #084298; }
-  .badge-done    { background: #d1e7dd; color: #0a3622; }
+/ ── MAP ── /
+.map-box{
+  margin:10px;height:170px;background:#c8e6c9;
+  border-radius:14px;position:relative;overflow:hidden;flex-shrink:0;
+  cursor:pointer;transition:transform .15s;
+}
+.map-box:hover{transform:scale(1.01);}
+.map-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(to right,rgba(255,255,255,.3) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(255,255,255,.3) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.map-loc{
+  position:absolute;top:10px;left:10px;
+  background:var(--eco-dark);color:#fff;
+  font-size:10px;padding:3px 10px;border-radius:20px;
+  display:flex;align-items:center;gap:4px;
+}
+.map-legend{
+  position:absolute;bottom:8px;left:10px;
+  display:flex;gap:10px;font-size:10px;color:#333;
+}
+.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px;}
+.map-locate{
+  position:absolute;bottom:8px;right:8px;
+  width:28px;height:28px;border-radius:6px;
+  background:#fff;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  transition:background .15s;
+}
+.map-locate:hover{background:#e8f5e9;}
+.pin{width:14px;height:14px;border-radius:50%;position:absolute;border:2px solid #fff;cursor:pointer;transition:transform .15s;}
+.pin:hover{transform:scale(1.3);}
 
-  /* BOTTOM NAV */
-  .bottom-nav {
-    display: flex; justify-content: space-around; align-items: center;
-    padding: 8px 4px 10px;
-    border-top: 0.5px solid rgba(0,0,0,.09);
-    flex-shrink: 0;
-    background: #fff;
-  }
-  .bnav-btn {
-    background: none; border: none; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center;
-    gap: 2px; color: #aaa; font-size: 10px; padding: 2px 6px;
-  }
-  .bnav-btn i { font-size: 20px; }
-  .bnav-btn.active { color: var(--eco-dark); }
-  .bnav-fab {
-    width: 42px; height: 42px; border-radius: 50%;
-    background: var(--eco-dark); color: #fff; border: none;
-    font-size: 22px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-  }
+/ ── STATS ROW ── /
+.stats-row{display:flex;gap:8px;padding:8px 10px;flex-shrink:0;}
+.stat-card{
+  flex:1;background:var(--eco-pale);border-radius:10px;
+  padding:10px 6px;text-align:center;border:.5px solid var(--border);
+  cursor:pointer;transition:background .15s,transform .15s;
+}
+.stat-card:hover{background:#e8f5e9;transform:translateY(-2px);}
+.stat-num{font-size:22px;font-weight:600;}
+.stat-num.amber{color:#d97706;}
+.stat-num.blue{color:#2563eb;}
+.stat-num.green{color:var(--eco-mid);}
+.stat-lbl{font-size:10px;color:var(--text-sec);margin-top:2px;}
 
-  /* RESPONSIVE */
-  @media (max-width: 640px) {
-    #sidebar { display: none !important; }
-    #phone-shell {
-      width: 100%; border-radius: 0;
-      margin: 0; height: 100vh;
-    }
-    #main { align-items: stretch; }
-  }
+/ ── SECTION TITLE ── /
+.sec-row{display:flex;justify-content:space-between;align-items:center;margin:6px 0 8px;}
+.sec-title{font-size:12px;font-weight:600;color:var(--text-sec);text-transform:uppercase;letter-spacing:.04em;}
+.sec-link{font-size:11px;color:var(--eco-mid);cursor:pointer;border:none;background:none;transition:color .15s;}
+.sec-link:hover{color:var(--eco-dark);text-decoration:underline;}
 
-  @media (min-width: 641px) and (max-width: 900px) {
-    #sidebar { width: 200px; min-width: 200px; }
-  }
+/ ── REPORT CARD ── /
+.r-card{
+  display:flex;gap:10px;align-items:center;
+  padding:10px 12px;background:#fff;border-radius:10px;
+  margin-bottom:8px;border:.5px solid var(--border);cursor:pointer;
+  transition:background .15s,transform .15s,box-shadow .15s;
+}
+.r-card:hover{background:#f9f9f9;transform:translateX(4px);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.r-icon{
+  width:42px;height:42px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.r-title{font-size:13px;font-weight:600;}
+.r-sub{font-size:11px;color:var(--text-sec);}
+.r-loc{font-size:10px;color:var(--text-sec);display:flex;align-items:center;gap:3px;margin-top:2px;}
+.r-meta{margin-left:auto;text-align:right;flex-shrink:0;}
+.r-time{font-size:10px;color:var(--text-sec);margin-top:4px;}
+
+/ ── BADGES ── /
+.badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;white-space:nowrap;}
+.b-pending{background:#fff3cd;color:#856404;}
+.b-progress{background:#cfe2ff;color:#084298;}
+.b-resolved{background:#d1e7dd;color:#0a3622;}
+
+/ ── BOTTOM NAV ── /
+.bot-nav{
+  display:flex;justify-content:space-around;align-items:center;
+  padding:8px 4px 10px;border-top:.5px solid rgba(0,0,0,.09);
+  flex-shrink:0;background:#fff;
+}
+.b-btn{
+  background:none;border:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;
+  gap:2px;color:#aaa;font-size:10px;padding:2px 8px;
+  transition:color .15s,transform .15s;
+}
+.b-btn:hover{color:var(--eco-mid);transform:translateY(-2px);}
+.b-btn i{font-size:21px;}
+.b-btn.active{color:var(--eco-dark);}
+.b-fab{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--eco-dark);color:#fff;border:none;
+  font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:transform .15s,background .15s;
+}
+.b-fab:hover{transform:scale(1.1);background:var(--eco-mid);}
+
+/ ── MY REPORTS ── /
+.search-bar{
+  background:var(--eco-dark);padding:10px 12px;flex-shrink:0;
+}
+.search-inp{
+  width:100%;padding:10px 14px 10px 36px;border-radius:30px;
+  border:none;font-size:13px;background:#fff;
+  position:relative;outline:none;
+}
+.search-inp:focus{box-shadow:0 0 0 2px var(--eco-mid);}
+.search-wrap{position:relative;}
+.search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#aaa;font-size:18px;}
+.this-month{
+  font-size:11px;font-weight:600;color:var(--text-sec);
+  text-transform:uppercase;letter-spacing:.04em;
+  margin-bottom:8px;
+}
+.stats-4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+.stat4{background:var(--eco-pale);border-radius:10px;padding:10px 4px;text-align:center;border:.5px solid var(--border);cursor:pointer;transition:background .15s,transform .15s;}
+.stat4:hover{background:#e8f5e9;transform:translateY(-2px);}
+.stat4-num{font-size:18px;font-weight:600;color:var(--eco-dark);}
+.stat4-lbl{font-size:9px;color:var(--text-sec);}
+
+/ ── NEW REPORT ── /
+.nr-header{
+  background:var(--eco-dark);color:#fff;padding:14px 16px;
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.nr-back{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;transition:transform .15s;}
+.nr-back:hover{transform:translateX(-3px);}
+.nr-body{flex:1;overflow-y:auto;padding:16px;background:var(--eco-bg);}
+.form-label{font-size:13px;font-weight:600;margin-bottom:8px;display:block;}
+.pill-group{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.pill{
+  padding:7px 14px;border-radius:20px;border:1.5px solid #333;
+  background:#fff;font-size:12px;cursor:pointer;transition:all .15s;
+}
+.pill:hover{background:#f0f0f0;}
+.pill.active{background:#333;color:#fff;}
+.impact-group{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.impact-btn{
+  padding:12px;border-radius:10px;border:1.5px solid #ddd;
+  background:#fff;font-size:13px;cursor:pointer;text-align:center;transition:all .15s;
+}
+.impact-btn:hover{border-color:#999;background:#f9f9f9;}
+.impact-btn.active{border-color:#333;background:#333;color:#fff;}
+.form-inp{
+  width:100%;padding:12px 14px;border-radius:10px;
+  border:1.5px solid #ddd;background:#fff;font-size:13px;
+  font-family:inherit;outline:none;margin-bottom:16px;
+  transition:border .15s;
+}
+.form-inp:focus{border-color:var(--eco-dark);}
+textarea.form-inp{resize:none;height:110px;}
+.submit-btn{
+  width:100%;padding:16px;border-radius:12px;
+  background:var(--eco-dark);color:#fff;border:none;
+  font-size:15px;font-weight:600;cursor:pointer;margin-top:4px;
+  transition:opacity .15s,transform .15s;
+}
+.submit-btn:hover{opacity:.9;transform:translateY(-2px);}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+/ ── NOTIFICATIONS ── /
+.filter-row{
+  display:flex;gap:8px;padding:10px 12px;
+  background:var(--eco-dark);flex-shrink:0;
+}
+.f-btn{
+  padding:6px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,.5);
+  background:transparent;color:#fff;font-size:11px;cursor:pointer;transition:all .15s;
+}
+.f-btn:hover{background:rgba(255,255,255,.1);}
+.f-btn.active{background:#fff;color:var(--eco-dark);border-color:#fff;font-weight:600;}
+.notif-item{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:14px;border-bottom:.5px solid var(--border);
+  cursor:pointer;transition:background .15s;
+}
+.notif-item:hover{background:#f9f9f9;}
+.n-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--eco-mid);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;flex-shrink:0;
+}
+.n-title{font-size:13px;font-weight:600;margin-bottom:2px;}
+.n-sub{font-size:11px;color:var(--text-sec);}
+.n-time{font-size:10px;color:var(--text-sec);margin-top:3px;}
+.n-dots{margin-left:auto;color:var(--text-sec);font-size:18px;cursor:pointer;flex-shrink:0;transition:color .15s;}
+.n-dots:hover{color:#333;}
+
+/ ── PROFILE ── /
+.prof-hero{
+  background:var(--eco-dark);padding:20px 16px 24px;
+  display:flex;flex-direction:column;align-items:center;
+  color:#fff;flex-shrink:0;
+}
+.prof-avatar{
+  width:64px;height:64px;border-radius:50%;
+  background:rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;margin-bottom:6px;position:relative;cursor:pointer;
+  transition:transform .15s;
+}
+.prof-avatar:hover{transform:scale(1.05);}
+.prof-edit{
+  position:absolute;bottom:0;right:0;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--eco-mid);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:11px;
+}
+.prof-name{font-size:18px;font-weight:700;margin-bottom:4px;}
+.prof-loc{font-size:12px;opacity:.8;display:flex;align-items:center;gap:4px;}
+.prof-bio{font-size:11px;opacity:.65;margin-top:4px;}
+.ach-row{display:flex;gap:10px;margin-bottom:12px;}
+.ach-card{
+  width:72px;height:72px;border-radius:12px;
+  background:#fff;border:.5px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;cursor:pointer;transition:transform .15s,box-shadow .15s;
+}
+.ach-card:hover{transform:translateY(-3px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
+.ach-lbl{font-size:9px;color:var(--text-sec);margin-top:2px;text-align:center;}
+.prof-report{
+  display:flex;flex-direction:column;
+  padding:12px 0;border-bottom:.5px solid var(--border);
+  cursor:pointer;transition:background .15s;
+}
+.prof-report:hover{background:#f9f9f9;margin:0 -12px;padding:12px;}
+.pr-title{font-size:13px;font-weight:600;margin-bottom:1px;}
+.pr-desc{font-size:11px;color:var(--text-sec);}
+.pr-row{display:flex;justify-content:space-between;margin-top:4px;}
+.pr-loc{font-size:10px;color:var(--text-sec);}
+.pr-time{font-size:10px;color:var(--text-sec);}
+.pr-badge{font-size:10px;color:#d97706;}
+
+/ ── MODAL ── /
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);
+  display:none;align-items:center;justify-content:center;z-index:1000;
+}
+.modal-overlay.active{display:flex;}
+.modal{
+  background:#fff;border-radius:16px;padding:24px;
+  max-width:340px;width:90%;text-align:center;
+  animation:modalIn .2s ease;
+}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.9);}
+  to{opacity:1;transform:scale(1);}
+}
+.modal-icon{font-size:48px;margin-bottom:12px;}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:8px;color:var(--eco-dark);}
+.modal-text{font-size:13px;color:var(--text-sec);margin-bottom:20px;}
+.modal-btn{
+  padding:12px 24px;background:var(--eco-dark);color:#fff;
+  border:none;border-radius:10px;font-size:14px;font-weight:600;
+  cursor:pointer;transition:opacity .15s;
+}
+.modal-btn:hover{opacity:.9;}
+
+/ ── TOAST ── /
+.toast{
+  position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(100px);
+  background:#333;color:#fff;padding:12px 24px;border-radius:30px;
+  font-size:13px;z-index:1001;opacity:0;transition:all .3s ease;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/ ── REPORT DETAIL ── /
+.detail-header{
+  background:var(--eco-dark);color:#fff;padding:14px 16px;
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.detail-body{flex:1;overflow-y:auto;padding:16px;background:var(--eco-bg);}
+.detail-card{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;border:.5px solid var(--border);}
+.detail-title{font-size:18px;font-weight:700;margin-bottom:4px;}
+.detail-badge{display:inline-block;margin-bottom:12px;}
+.detail-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;}
+.detail-row i{color:var(--eco-mid);font-size:18px;}
+.detail-label{color:var(--text-sec);font-size:11px;margin-bottom:2px;}
+.detail-value{font-size:13px;font-weight:500;}
+.timeline{margin-top:16px;}
+.timeline-item{display:flex;gap:12px;padding:8px 0;position:relative;}
+.timeline-item:not(:last-child)::before{
+  content:'';position:absolute;left:11px;top:28px;bottom:-8px;
+  width:2px;background:#ddd;
+}
+.timeline-dot{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--eco-light);border:2px solid var(--eco-mid);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;flex-shrink:0;
+}
+.timeline-text{font-size:12px;}
+.timeline-time{font-size:10px;color:var(--text-sec);}
+
+/ ── SETTINGS ── /
+.settings-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;border-bottom:.5px solid var(--border);cursor:pointer;
+}
+.settings-item:hover{background:#f9f9f9;margin:0 -12px;padding:14px 12px;}
+.settings-left{display:flex;align-items:center;gap:12px;}
+.settings-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--eco-light);color:var(--eco-dark);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.settings-title{font-size:13px;font-weight:600;}
+.settings-sub{font-size:11px;color:var(--text-sec);}
+.settings-arrow{color:#ccc;font-size:18px;}
+
+/ ── TOGGLE SWITCH ── /
+.toggle{
+  width:44px;height:24px;border-radius:12px;
+  background:#ddd;position:relative;cursor:pointer;
+  transition:background .2s;
+}
+.toggle.active{background:var(--eco-mid);}
+.toggle::after{
+  content:'';position:absolute;
+  width:20px;height:20px;border-radius:50%;
+  background:#fff;top:2px;left:2px;
+  transition:transform .2s;
+}
+.toggle.active::after{transform:translateX(20px);}
+
+/ ── RESPONSIVE ── /
+@media(max-width:640px){
+  #sidebar{display:none!important;}
+  #phone{width:100%;border-radius:0;margin:0;height:100vh;}
+  #main{align-items:stretch;}
+}
+@media(min-width:641px)and (max-width:900px){
+  #sidebar{width:180px;min-width:180px;}
+}
 </style>
 </head>
 <body>
+<div id="app">
 
-<div id="ecoapp">
-
-  <!-- SIDEBAR -->
-  <aside id="sidebar">
-    <div class="logo">
-      <i class="ti ti-leaf"></i> EcoWatch
-      <small>Community Pollution Reporter</small>
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div class="logo" onclick="goTo('home')">
+    <i class="ti ti-leaf" aria-hidden="true"></i>
+    <div>EcoWatch<small>Community Pollution Reporter</small></div>
+  </div>
+  <div class="user-card" onclick="goTo('profile')">
+    <div class="s-avatar"><i class="ti ti-user"></i></div>
+    <div>
+      <div class="s-name">Jake Montecillo</div>
+      <div class="s-loc">📍 Cogon, Bogo City Cebu</div>
     </div>
+  </div>
+  <nav class="s-nav">
+    <button class="s-btn active" data-screen="home" onclick="goTo('home',this)"><i class="ti ti-home"></i> Home</button>
+    <button class="s-btn" data-screen="reports" onclick="goTo('reports',this)"><i class="ti ti-layout-grid"></i> My Reports</button>
+    <button class="s-btn" data-screen="new" onclick="goTo('new',this)"><i class="ti ti-plus"></i> New Report</button>
+    <button class="s-btn" data-screen="notifs" onclick="goTo('notifs',this)"><i class="ti ti-bell"></i> Notifications</button>
+    <button class="s-btn" data-screen="profile" onclick="goTo('profile',this)"><i class="ti ti-user"></i> Profile</button>
+  </nav>
+  <div class="s-foot">EcoWatch v1.0 · Bogo City, Cebu</div>
+</aside>
 
-    <div class="user-card">
-      <div class="avatar"><i class="ti ti-user"></i></div>
+<!-- MAIN -->
+<div id="main">
+<div id="phone">
+
+<!-- ══════════════════════════════
+     SCREEN: HOME
+══════════════════════════════ -->
+<div class="screen active" id="sc-home">
+  <div class="g-header">
+    <div class="g-header-row">
       <div>
-        <div class="user-name">Jake Montecillo</div>
-        <div class="user-loc">Cogon, Bogo City Cebu</div>
+        <div style="font-size:11px;opacity:.75;">Good morning,</div>
+        <div style="font-size:15px;font-weight:600;">Jake</div>
+      </div>
+      <div class="g-icons">
+        <i class="ti ti-bell" onclick="goTo('notifs')" title="Notifications"></i>
+        <i class="ti ti-user-circle" onclick="goTo('profile')" title="Profile"></i>
       </div>
     </div>
-
-    <nav class="sidebar-nav">
-      <button class="nav-btn active"><i class="ti ti-home"></i> Home</button>
-      <button class="nav-btn"><i class="ti ti-file-text"></i> Reports</button>
-      <button class="nav-btn"><i class="ti ti-plus"></i> New report</button>
-      <button class="nav-btn"><i class="ti ti-bell"></i> Notifications</button>
-      <button class="nav-btn"><i class="ti ti-user"></i> Profile</button>
-    </nav>
-
-    <div class="sidebar-foot">EcoWatch v1.0 · Cebu</div>
-  </aside>
-
-  <!-- MAIN CONTENT -->
-  <div id="main">
-    <div id="phone-shell">
-
-      <!-- HEADER -->
-      <div class="app-header">
-        <div>
-          <div class="greet">Good morning</div>
-          <div class="name">Jake</div>
-        </div>
-        <div style="display:flex;gap:14px;font-size:20px;">
-          <i class="ti ti-bell"></i>
-          <i class="ti ti-user-circle"></i>
-        </div>
-      </div>
-
-      <!-- MAP -->
-      <div class="map-box">
-        <div class="map-grid"></div>
-        <div class="map-label">Cogon, Bogo City</div>
-        <div class="pin" style="top:38%;left:28%;background:#e53935;"></div>
-        <div class="pin" style="top:58%;left:60%;background:#fb8c00;"></div>
-        <div class="pin" style="top:25%;left:65%;background:#43a047;"></div>
-      </div>
-
-      <!-- STATS -->
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-num">1</div>
-          <div class="stat-lbl">Pending</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">2</div>
-          <div class="stat-lbl">In review</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">1</div>
-          <div class="stat-lbl">Resolved</div>
-        </div>
-      </div>
-
-      <!-- REPORTS -->
-      <div class="scroll-area">
-        <div class="section-title">Recent reports</div>
-
-        <div class="report-card">
-          <div class="report-icon" style="background:#e3f2fd;">💧</div>
-          <div>
-            <div class="report-title">Water pollution</div>
-            <div class="report-sub">Near river area · 2h ago</div>
-          </div>
-          <span class="badge badge-pending">Pending</span>
-        </div>
-
-        <div class="report-card">
-          <div class="report-icon" style="background:#f3e5f5;">🗑️</div>
-          <div>
-            <div class="report-title">Land pollution</div>
-            <div class="report-sub">Trash accumulation · 5h ago</div>
-          </div>
-          <span class="badge badge-review">In review</span>
-        </div>
-
-        <div class="report-card">
-          <div class="report-icon" style="background:#fff8e1;">💨</div>
-          <div>
-            <div class="report-title">Air pollution</div>
-            <div class="report-sub">Factory smoke · Yesterday</div>
-          </div>
-          <span class="badge badge-review">In review</span>
-        </div>
-
-        <div class="report-card">
-          <div class="report-icon" style="background:#e8f5e9;">🌿</div>
-          <div>
-            <div class="report-title">Illegal dumping</div>
-            <div class="report-sub">Mangrove area · 3 days ago</div>
-          </div>
-          <span class="badge badge-done">Resolved</span>
-        </div>
-      </div>
-
-      <!-- BOTTOM NAV -->
-      <nav class="bottom-nav">
-        <button class="bnav-btn active">
-          <i class="ti ti-home"></i>
-          <span>Home</span>
-        </button>
-        <button class="bnav-btn">
-          <i class="ti ti-file-text"></i>
-          <span>Reports</span>
-        </button>
-        <button class="bnav-fab">
-          <i class="ti ti-plus"></i>
-        </button>
-        <button class="bnav-btn">
-          <i class="ti ti-bell"></i>
-          <span>Notif</span>
-        </button>
-        <button class="bnav-btn">
-          <i class="ti ti-user"></i>
-          <span>Profile</span>
-        </button>
-      </nav>
-
+    <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border-radius:8px;padding:7px 12px;margin-top:10px;font-size:12px;cursor:pointer;" onclick="showToast('📍 Current location: Bgry. Sagong Siang, Caloocan')">
+      📍 Bgry. Sagong Siang, Caloocan
     </div>
   </div>
 
+  <div class="map-box" onclick="showToast('Map view - Tap pins to see report details')">
+    <div class="map-grid"></div>
+    <div class="map-loc">📍 Cogon, Bogo City</div>
+    <div class="pin" style="top:38%;left:28%;background:#e53935;" onclick="event.stopPropagation();showReportDetail(0)" title="Pending Report"></div>
+    <div class="pin" style="top:55%;left:58%;background:#fb8c00;" onclick="event.stopPropagation();showReportDetail(1)" title="Reviewing Report"></div>
+    <div class="pin" style="top:25%;left:66%;background:#43a047;" onclick="event.stopPropagation();showReportDetail(2)" title="Resolved Report"></div>
+    <div class="pin" style="top:60%;left:38%;background:#fb8c00;" onclick="event.stopPropagation();showReportDetail(1)" title="Reviewing Report"></div>
+    <div class="map-legend">
+      <span><span class="legend-dot" style="background:#e53935;"></span>Pending</span>
+      <span><span class="legend-dot" style="background:#fb8c00;"></span>Reviewing</span>
+      <span><span class="legend-dot" style="background:#43a047;"></span>Resolved</span>
+    </div>
+    <button class="map-locate" onclick="event.stopPropagation();locateUser()" title="Find my location"><i class="ti ti-current-location" style="font-size:15px;"></i></button>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card" onclick="filterByStatus('pending')"><div class="stat-num amber" id="home-pending">1</div><div class="stat-lbl">Pending</div></div>
+    <div class="stat-card" onclick="filterByStatus('progress')"><div class="stat-num blue" id="home-reviewing">2</div><div class="stat-lbl">Reviewing</div></div>
+    <div class="stat-card" onclick="filterByStatus('resolved')"><div class="stat-num green" id="home-resolved">1</div><div class="stat-lbl">Resolved</div></div>
+  </div>
+
+  <div class="s-body" style="padding-top:4px;">
+    <div class="sec-row">
+      <span class="sec-title">Recent Report</span>
+      <button class="sec-link" onclick="goTo('reports')">See all</button>
+    </div>
+
+    <div class="r-card" onclick="showReportDetail(0)">
+      <div class="r-icon" style="background:#e3f2fd;">💧</div>
+      <div style="flex:1;">
+        <div class="r-title">Water Pollution</div>
+        <div class="r-sub">Industrial waste discharge</div>
+        <div class="r-loc">📍 Blk 2, Bgry. Bagong Silang, Caloocan</div>
+        <div class="r-sub">Impact Level: Medium</div>
+      </div>
+      <div class="r-meta">
+        <span class="badge b-progress">Progress</span>
+        <div class="r-time">2h ago</div>
+      </div>
+    </div>
+
+    <div class="r-card" onclick="showReportDetail(1)">
+      <div class="r-icon" style="background:#e3f2fd;">💧</div>
+      <div style="flex:1;">
+        <div class="r-title">Water Pollution</div>
+        <div class="r-sub">Sewage overflow</div>
+        <div class="r-loc">📍 Blk 2, Bgry. Bagong Silang, Caloocan</div>
+        <div class="r-sub">Impact Level: Low</div>
+      </div>
+      <div class="r-meta">
+        <span class="badge b-progress">Progress</span>
+        <div class="r-time">2h ago</div>
+      </div>
+    </div>
+
+    <div class="r-card" onclick="showReportDetail(2)">
+      <div class="r-icon" style="background:#e8f5e9;">🌴</div>
+      <div style="flex:1;">
+        <div class="r-title">Land Pollution</div>
+        <div class="r-sub">Illegal dumping site</div>
+        <div class="r-loc">📍 Blk 2, Bgry. Sagong Siang, Caloocan</div>
+        <div class="r-sub">Impact Level: Medium</div>
+      </div>
+      <div class="r-meta">
+        <span class="badge b-pending">Pending</span>
+        <div class="r-time">6h ago</div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bot-nav">
+    <button class="b-btn active" data-screen="home" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="b-btn" data-screen="reports" onclick="goTo('reports')"><i class="ti ti-layout-grid"></i><span>Reports</span></button>
+    <button class="b-fab" onclick="goTo('new')" title="New Report"><i class="ti ti-plus"></i></button>
+    <button class="b-btn" data-screen="notifs" onclick="goTo('notifs')"><i class="ti ti-bell"></i><span>Notif</span></button>
+    <button class="b-btn" data-screen="profile" onclick="goTo('profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </nav>
 </div>
 
+<!-- ══════════════════════════════
+     SCREEN: MY REPORTS
+══════════════════════════════ -->
+<div class="screen" id="sc-reports">
+  <div class="g-header">
+    <div class="g-title">My Reports</div>
+  </div>
+  <div class="search-bar">
+    <div class="search-wrap">
+      <i class="ti ti-search"></i>
+      <input class="search-inp" id="search-inp" type="text" placeholder="Search reports..." oninput="filterReports(this.value)">
+    </div>
+  </div>
+
+  <div class="s-body">
+    <div class="this-month">This Month</div>
+    <div class="stats-4">
+      <div class="stat4" onclick="filterReportsByStatus('all')"><div class="stat4-num" id="stat-total">8</div><div class="stat4-lbl">Total</div></div>
+      <div class="stat4" onclick="filterReportsByStatus('pending')"><div class="stat4-num" style="color:#d97706;" id="stat-pending">3</div><div class="stat4-lbl">Pending</div></div>
+      <div class="stat4" onclick="filterReportsByStatus('resolved')"><div class="stat4-num" style="color:var(--eco-mid);" id="stat-resolved">3</div><div class="stat4-lbl">Resolved</div></div>
+      <div class="stat4" onclick="filterReportsByStatus('progress')"><div class="stat4-num" style="color:#2563eb;" id="stat-progress">1</div><div class="stat4-lbl">Progress</div></div>
+    </div>
+
+    <div class="sec-row">
+      <span class="sec-title">Recent Submissions</span>
+      <button class="sec-link" onclick="toggleSortMenu()">Sort by ▾</button>
+    </div>
+
+    <div id="reports-list">
+      <div class="r-card" data-type="water" data-status="pending" data-time="6" onclick="showReportDetail(0)">
+        <div class="r-icon" style="background:#e3f2fd;">💧</div>
+        <div style="flex:1;">
+          <div class="r-title">Water Pollution</div>
+          <div class="r-sub">Industrial waste discharge</div>
+          <div class="r-loc">📍 Blk 2, Bgry. Sagong Siang, Caloocan</div>
+          <div class="r-sub">Impact Level: Medium</div>
+        </div>
+        <div class="r-meta"><span class="badge b-pending">Pending</span><div class="r-time">6h ago</div></div>
+      </div>
+      <div class="r-card" data-type="land" data-status="progress" data-time="2" onclick="showReportDetail(1)">
+        <div class="r-icon" style="background:#e8f5e9;">🌴</div>
+        <div style="flex:1;">
+          <div class="r-title">Land Pollution</div>
+          <div class="r-sub">Illegal dumping site</div>
+          <div class="r-loc">📍 Blk 2, Bgry. Sagong Siang, Caloocan</div>
+          <div class="r-sub">Impact Level: Medium</div>
+        </div>
+        <div class="r-meta"><span class="badge b-progress">Progress</span><div class="r-time">2h ago</div></div>
+      </div>
+      <div class="r-card" data-type="land" data-status="resolved" data-time="24" onclick="showReportDetail(2)">
+        <div class="r-icon" style="background:#e8f5e9;">🌴</div>
+        <div style="flex:1;">
+          <div class="r-title">Land Pollution</div>
+          <div class="r-sub">Construction debris</div>
+          <div class="r-loc">📍 Blk 2, Bgry. Sagong Siang, Caloocan</div>
+          <div class="r-sub">Impact Level: Medium</div>
+        </div>
+        <div class="r-meta"><span class="badge b-resolved">Resolved</span><div class="r-time">1d ago</div></div>
+      </div>
+      <div class="r-card" data-type="air" data-status="pending" data-time="24" onclick="showReportDetail(3)">
+        <div class="r-icon" style="background:#fff8e1;">💨</div>
+        <div style="flex:1;">
+          <div class="r-title">Air Pollution</div>
+          <div class="r-sub">Factory emissions</div>
+          <div class="r-loc">📍 Blk 2, Bgry. Sagong Siang, Caloocan</div>
+          <div class="r-sub">Impact Level: High</div>
+        </div>
+        <div class="r-meta"><span class="badge b-pending">Pending</span><div class="r-time">1d ago</div></div>
+      </div>
+      <div class="r-card" data-type="water" data-status="resolved" data-time="48" onclick="showReportDetail(4)">
+        <div class="r-icon" style="background:#e3f2fd;">💧</div>
+        <div style="flex:1;">
+          <div class="r-title">Water Pollution</div>
+          <div class="r-sub">Oil spill in river</div>
+          <div class="r-loc">📍 Blk 2, Bgry. Sagong Siang, Caloocan</div>
+          <div class="r-sub">Impact Level: Low</div>
+        </div>
+        <div class="r-meta"><span class="badge b-resolved">Resolved</span><div class="r-time">2d ago</div></div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bot-nav">
+    <button class="b-btn" data-screen="home" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="b-btn active" data-screen="reports" onclick="goTo('reports')"><i class="ti ti-layout-grid"></i><span>Reports</span></button>
+    <button class="b-fab" onclick="goTo('new')" title="New Report"><i class="ti ti-plus"></i></button>
+    <button class="b-btn" data-screen="notifs" onclick="goTo('notifs')"><i class="ti ti-bell"></i><span>Notif</span></button>
+    <button class="b-btn" data-screen="profile" onclick="goTo('profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: NEW REPORT
+══════════════════════════════ -->
+<div class="screen" id="sc-new">
+  <div class="nr-header">
+    <button class="nr-back" onclick="goTo('home')" title="Go back"><i class="ti ti-arrow-left"></i></button>
+    <div class="g-title" style="text-align:center;">Report Pollution</div>
+  </div>
+
+  <div class="nr-body">
+    <label class="form-label">Type of pollution <span style="color:#e53935;"></span></label>
+    <div class="pill-group" id="pollution-types">
+      <button class="pill" onclick="togglePill(this)" data-value="water">Water Pollution</button>
+      <button class="pill" onclick="togglePill(this)" data-value="noise">Noise Pollution</button>
+      <button class="pill" onclick="togglePill(this)" data-value="air">Air Pollution</button>
+      <button class="pill" onclick="togglePill(this)" data-value="light">Light Pollution</button>
+      <button class="pill" onclick="togglePill(this)" data-value="land">Land Pollution</button>
+      <button class="pill" onclick="showMoreTypes()" data-value="more">+ More</button>
+    </div>
+
+    <label class="form-label">Impact <span style="color:#e53935;"></span></label>
+    <div class="impact-group" id="impact-btns">
+      <button class="impact-btn" onclick="toggleImpact(this)" data-value="low">Low</button>
+      <button class="impact-btn" onclick="toggleImpact(this)" data-value="medium">Medium</button>
+      <button class="impact-btn" onclick="toggleImpact(this)" data-value="high">High</button>
+    </div>
+
+    <label class="form-label">Location <span style="color:#e53935;"></span></label>
+    <div style="position:relative;">
+      <input class="form-inp" type="text" id="location-inp" placeholder="Enter location or use current..." style="padding-right:40px;">
+      <button onclick="useCurrentLocation()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--eco-mid);font-size:20px;" title="Use current location"><i class="ti ti-current-location"></i></button>
+    </div>
+
+    <label class="form-label">Description</label>
+    <textarea class="form-inp" id="desc-inp" placeholder="Describe the pollution in detail..."></textarea>
+
+    <label class="form-label">Add Photo (Optional)</label>
+    <div style="border:2px dashed #ddd;border-radius:10px;padding:20px;text-align:center;margin-bottom:16px;cursor:pointer;transition:border-color .15s;" onclick="uploadPhoto()" onmouseover="this.style.borderColor='var(--eco-mid)'" onmouseout="this.style.borderColor='#ddd'">
+      <i class="ti ti-camera" style="font-size:32px;color:#aaa;"></i>
+      <div style="font-size:12px;color:var(--text-sec);margin-top:8px;">Tap to add photo</div>
+      <div id="photo-preview" style="margin-top:10px;display:none;"></div>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="submitReport()">Submit Report</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: NOTIFICATIONS
+══════════════════════════════ -->
+<div class="screen" id="sc-notifs">
+  <div class="g-header" style="padding-bottom:10px;">
+    <div class="g-title">Notifications</div>
+  </div>
+  <div class="filter-row">
+    <button class="f-btn active" onclick="filterNotif('all',this)">All</button>
+    <button class="f-btn" onclick="filterNotif('pending',this)">Pending</button>
+    <button class="f-btn" onclick="filterNotif('progress',this)">Progress</button>
+    <button class="f-btn" onclick="filterNotif('resolved',this)">Resolved</button>
+  </div>
+
+  <div class="s-body" style="padding:0;" id="notif-list">
+    <div class="notif-item" data-status="progress" onclick="showReportDetail(1)">
+      <div class="n-avatar">BG</div>
+      <div style="flex:1;">
+        <div class="n-title">Report is now in progress</div>
+        <div class="n-sub">Air Pollution · Purok 2</div>
+        <div class="n-time">2 days ago</div>
+      </div>
+      <span class="badge b-progress" style="margin-left:8px;align-self:flex-start;">Progress</span>
+      <div class="n-dots" onclick="event.stopPropagation();showNotifOptions()">···</div>
+    </div>
+    <div class="notif-item" data-status="resolved" onclick="showReportDetail(2)">
+      <div class="n-avatar" style="background:#0a3622;">JM</div>
+      <div style="flex:1;">
+        <div class="n-title">Report has been resolved</div>
+        <div class="n-sub">Land Pollution · Purok 1</div>
+        <div class="n-time">3 days ago</div>
+      </div>
+      <span class="badge b-resolved" style="margin-left:8px;align-self:flex-start;">Resolved</span>
+      <div class="n-dots" onclick="event.stopPropagation();showNotifOptions()">···</div>
+    </div>
+    <div class="notif-item" data-status="pending" onclick="showReportDetail(0)">
+      <div class="n-avatar" style="background:#856404;">JM</div>
+      <div style="flex:1;">
+        <div class="n-title">New report submitted</div>
+        <div class="n-sub">Water Pollution · Purok 3</div>
+        <div class="n-time">5 days ago</div>
+      </div>
+      <span class="badge b-pending" style="margin-left:8px;align-self:flex-start;">Pending</span>
+      <div class="n-dots" onclick="event.stopPropagation();showNotifOptions()">···</div>
+    </div>
+    <div class="notif-item" data-status="progress" onclick="showReportDetail(1)">
+      <div class="n-avatar" style="background:var(--eco-mid);">EC</div>
+      <div style="flex:1;">
+        <div class="n-title">Team assigned to your report</div>
+        <div class="n-sub">Water Pollution · Purok 1</div>
+        <div class="n-time">1 week ago</div>
+      </div>
+      <span class="badge b-progress" style="margin-left:8px;align-self:flex-start;">Progress</span>
+      <div class="n-dots" onclick="event.stopPropagation();showNotifOptions()">···</div>
+    </div>
+  </div>
+
+  <nav class="bot-nav">
+    <button class="b-btn" data-screen="home" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="b-btn" data-screen="reports" onclick="goTo('reports')"><i class="ti ti-layout-grid"></i><span>Reports</span></button>
+    <button class="b-fab" onclick="goTo('new')" title="New Report"><i class="ti ti-plus"></i></button>
+    <button class="b-btn active" data-screen="notifs" onclick="goTo('notifs')"><i class="ti ti-bell"></i><span>Notif</span></button>
+    <button class="b-btn" data-screen="profile" onclick="goTo('profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: PROFILE
+══════════════════════════════ -->
+<div class="screen" id="sc-profile">
+  <div class="prof-hero">
+    <div class="prof-avatar" onclick="editAvatar()">
+      <i class="ti ti-user"></i>
+      <div class="prof-edit"><i class="ti ti-pencil" style="font-size:10px;"></i></div>
+    </div>
+    <div class="prof-name">Jake Montecillo</div>
+    <div class="prof-loc">📍 Cogon, Bogo City Cebu, Purok 1</div>
+    <div class="prof-bio">Just want to help the community</div>
+  </div>
+
+  <div class="s-body">
+    <div class="sec-title" style="margin-bottom:10px;">Achievements</div>
+    <div class="ach-row">
+      <div class="ach-card" onclick="showAchievement('Gold Reporter','Submitted 50+ reports')">🥇<div class="ach-lbl">Gold</div></div>
+      <div class="ach-card" onclick="showAchievement('Star Contributor','Top 10% of reporters')">⭐<div class="ach-lbl">Star</div></div>
+      <div class="ach-card" onclick="showAchievement('Green Advocate','10 environmental reports')">🌿<div class="ach-lbl">Green Advocate</div></div>
+      <div class="ach-card" onclick="showAchievement('First Responder','First report in your area')">✏️<div class="ach-lbl">First Responder</div></div>
+    </div>
+
+    <div class="sec-row" style="margin-top:16px;">
+      <span class="sec-title">Recent Activity</span>
+      <button class="sec-link" onclick="goTo('reports')">View all</button>
+    </div>
+
+    <div class="prof-report" onclick="showReportDetail(0)">
+      <div class="pr-title">Land Pollution</div>
+      <div class="pr-desc">Jake reported land pollution<br>Impact Level: Medium</div>
+      <div class="pr-row">
+        <span class="pr-loc">📍 Purok 1</span>
+        <span class="pr-time">3 hours ago</span>
+        <span class="pr-badge">Progress</span>
+      </div>
+    </div>
+    <div class="prof-report" onclick="showReportDetail(1)">
+      <div class="pr-title">Air Pollution</div>
+      <div class="pr-desc">Jake reported air pollution<br>Impact Level: Medium</div>
+      <div class="pr-row">
+        <span class="pr-loc">📍 Purok 1</span>
+        <span class="pr-time">3 hours ago</span>
+        <span class="pr-badge">Progress</span>
+      </div>
+    </div>
+    <div class="prof-report" onclick="showReportDetail(2)">
+      <div class="pr-title">Water Pollution</div>
+      <div class="pr-desc">Jake reported water pollution<br>Impact Level: Medium</div>
+      <div class="pr-row">
+        <span class="pr-loc">📍 Purok 1</span>
+        <span class="pr-time">3 hours ago</span>
+        <span class="pr-badge">Resolved</span>
+      </div>
+    </div>
+
+    <div class="sec-title" style="margin-top:20px;margin-bottom:10px;">Settings</div>
+    
+    <div class="settings-item" onclick="goTo('settings')">
+      <div class="settings-left">
+        <div class="settings-icon"><i class="ti ti-settings"></i></div>
+        <div>
+          <div class="settings-title">App Settings</div>
+          <div class="settings-sub">Notifications, privacy, language</div>
+        </div>
+      </div>
+      <i class="ti ti-chevron-right settings-arrow"></i>
+    </div>
+    
+    <div class="settings-item" onclick="showModal('help','Help & Support','Need assistance? Contact us at support@ecowatch.com or call our hotline at 1-800-ECO-HELP')">
+      <div class="settings-left">
+        <div class="settings-icon"><i class="ti ti-help"></i></div>
+        <div>
+          <div class="settings-title">Help & Support</div>
+          <div class="settings-sub">FAQs, contact us</div>
+        </div>
+      </div>
+      <i class="ti ti-chevron-right settings-arrow"></i>
+    </div>
+    
+    <div class="settings-item" onclick="showModal('about','About EcoWatch','Version 1.0.0\n\nEcoWatch is a community-driven platform for reporting and tracking environmental pollution. Together, we can make our communities cleaner and healthier.')">
+      <div class="settings-left">
+        <div class="settings-icon"><i class="ti ti-info-circle"></i></div>
+        <div>
+          <div class="settings-title">About</div>
+          <div class="settings-sub">Version, terms, privacy</div>
+        </div>
+      </div>
+      <i class="ti ti-chevron-right settings-arrow"></i>
+    </div>
+    
+    <div class="settings-item" onclick="confirmLogout()" style="border-bottom:none;">
+      <div class="settings-left">
+        <div class="settings-icon" style="background:#ffebee;color:#e53935;"><i class="ti ti-logout"></i></div>
+        <div>
+          <div class="settings-title" style="color:#e53935;">Log Out</div>
+          <div class="settings-sub">Sign out of your account</div>
+        </div>
+      </div>
+      <i class="ti ti-chevron-right settings-arrow"></i>
+    </div>
+  </div>
+
+  <nav class="bot-nav">
+    <button class="b-btn" data-screen="home" onclick="goTo('home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="b-btn" data-screen="reports" onclick="goTo('reports')"><i class="ti ti-layout-grid"></i><span>Reports</span></button>
+    <button class="b-fab" onclick="goTo('new')" title="New Report"><i class="ti ti-plus"></i></button>
+    <button class="b-btn" data-screen="notifs" onclick="goTo('notifs')"><i class="ti ti-bell"></i><span>Notif</span></button>
+    <button class="b-btn active" data-screen="profile" onclick="goTo('profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: SUCCESS
+══════════════════════════════ -->
+<div class="screen" id="sc-success">
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;">
+    <div style="font-size:64px;margin-bottom:16px;">✅</div>
+    <div style="font-size:20px;font-weight:700;color:var(--eco-dark);margin-bottom:8px;">Report Submitted!</div>
+    <div style="font-size:13px;color:var(--text-sec);margin-bottom:28px;">Your pollution report has been submitted successfully. The community team will review it shortly.</div>
+    <button onclick="goTo('home')" style="padding:14px 32px;background:var(--eco-dark);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s;">Back to Home</button>
+    <button onclick="goTo('reports')" style="margin-top:10px;padding:12px 32px;background:transparent;color:var(--eco-dark);border:1.5px solid var(--eco-dark);border-radius:12px;font-size:13px;cursor:pointer;transition:background .15s;">View My Reports</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: REPORT DETAIL
+══════════════════════════════ -->
+<div class="screen" id="sc-detail">
+  <div class="detail-header">
+    <button class="nr-back" onclick="goBack()" title="Go back"><i class="ti ti-arrow-left"></i></button>
+    <div class="g-title" style="text-align:center;">Report Details</div>
+    <i class="ti ti-dots-vertical" style="cursor:pointer;" onclick="showReportOptions()"></i>
+  </div>
+
+  <div class="detail-body">
+    <div class="detail-card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <div class="r-icon" id="detail-icon" style="background:#e3f2fd;font-size:28px;">💧</div>
+        <div>
+          <div class="detail-title" id="detail-title">Water Pollution</div>
+          <span class="badge b-progress detail-badge" id="detail-badge">Progress</span>
+        </div>
+      </div>
+      
+      <div class="detail-row">
+        <i class="ti ti-map-pin"></i>
+        <div>
+          <div class="detail-label">Location</div>
+          <div class="detail-value" id="detail-location">Blk 2, Bgry. Sagong Siang, Caloocan</div>
+        </div>
+      </div>
+      
+      <div class="detail-row">
+        <i class="ti ti-alert-triangle"></i>
+        <div>
+          <div class="detail-label">Impact Level</div>
+          <div class="detail-value" id="detail-impact">Medium</div>
+        </div>
+      </div>
+      
+      <div class="detail-row">
+        <i class="ti ti-clock"></i>
+        <div>
+          <div class="detail-label">Reported</div>
+          <div class="detail-value" id="detail-time">2 hours ago</div>
+        </div>
+      </div>
+      
+      <div style="margin-top:16px;">
+        <div class="detail-label">Description</div>
+        <div class="detail-value" id="detail-desc" style="margin-top:4px;line-height:1.5;">Industrial waste discharge observed in the river. The water has turned murky with visible oil slicks on the surface.</div>
+      </div>
+    </div>
+
+    <div class="detail-card">
+      <div style="font-weight:600;margin-bottom:12px;">Status Timeline</div>
+      <div class="timeline" id="detail-timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot">📝</div>
+          <div>
+            <div class="timeline-text">Report submitted</div>
+            <div class="timeline-time">June 14, 2026 · 2:30 PM</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">👀</div>
+          <div>
+            <div class="timeline-text">Under review by team</div>
+            <div class="timeline-time">June 14, 2026 · 4:15 PM</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="border-color:#2563eb;">🔧</div>
+          <div>
+            <div class="timeline-text" style="font-weight:600;color:#2563eb;">Action team dispatched</div>
+            <div class="timeline-time">June 15, 2026 · 9:00 AM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button onclick="shareReport()" style="width:100%;padding:14px;background:#fff;color:var(--eco-dark);border:1.5px solid var(--eco-dark);border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s;">
+      <i class="ti ti-share"></i> Share Report
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SCREEN: SETTINGS
+══════════════════════════════ -->
+<div class="screen" id="sc-settings">
+  <div class="detail-header">
+    <button class="nr-back" onclick="goTo('profile')" title="Go back"><i class="ti ti-arrow-left"></i></button>
+    <div class="g-title" style="text-align:center;">Settings</div>
+  </div>
+
+  <div class="s-body">
+    <div class="sec-title" style="margin-bottom:10px;">Notifications</div>
+    
+    <div class="settings-item" style="cursor:default;">
+      <div class="settings-left">
+        <div class="settings-icon"><i class="ti ti-bell"></i></div>
+        <div>
+          <div class="settings-title">Push Notifications</div>
+          <div class="settings-sub">Receive alerts for updates</div>
+        </div>
+      </div>
+      <div class="toggle active" id="toggle-push" onclick="toggleSwitch(this)"></div>
+    </div>
+    
+    <div class="settings-item" style="cursor:default;">
+      <div class="settings-left">
+        <div class="settings-icon"><i class="ti ti-mail"></i></div>
+        <div>
+          <div class="settings-title">Email Notifications</div>
+          <div class="settings-sub">Weekly summary reports</div>
+        </div>
+      </div>
+      <div class="toggle" id="toggle-email" onclick="toggleSwitch(this)"></div>
+    </div>
+
+    <div class="sec-title" style="margin-top:20px;margin-bottom:10px;">Privacy</div>
+    
+    <div class="settings-item" style="cursor:default;">
+      <div class="settings-left">
+        <div class="settings-icon"><i class="ti ti-eye"></i></div>
+        <div>
+          <div class="settings-title">Profile Visibility</div>
+          <div class="settings-sub">Show my name on reports</div>
+        </div>
+      </div>
+      <div class="toggle active" id="toggle-visibility" onclick="toggleSwitch(this)"></div>
+    </div>
+    
+    <div class="settings-item" style="cursor:default;">
+      <div class="settings-left">
+        <div class="settings-icon"><i class="ti ti-map-pin"></i></div>
+        <div>
+          <div class="settings-title">Location Services</div>
+          <div class="settings-sub">Allow location access</div>
+        </div>
+      </div>
+      <div class="toggle active" id="toggle-location" onclick="toggleSwitch(this)"></div>
+    </div>
+
+    <div class="sec-title" style="margin-top:20px;margin-bottom:10px;">Preferences</div>
+    
+    <div class="settings-item" onclick="showLanguageOptions()">
+      <div class="settings-left">
+        <div class="settings-icon"><i class="ti ti-language"></i></div>
+        <div>
+          <div class="settings-title">Language</div>
+          <div class="settings-sub" id="current-language">English</div>
+        </div>
+      </div>
+      <i class="ti ti-chevron-right settings-arrow"></i>
+    </div>
+    
+    <div class="settings-item" style="cursor:default;">
+      <div class="settings-left">
+        <div class="settings-icon"><i class="ti ti-moon"></i></div>
+        <div>
+          <div class="settings-title">Dark Mode</div>
+          <div class="settings-sub">Coming soon</div>
+        </div>
+      </div>
+      <div class="toggle" id="toggle-dark" style="opacity:0.5;pointer-events:none;"></div>
+    </div>
+
+    <div class="sec-title" style="margin-top:20px;margin-bottom:10px;">Account</div>
+    
+    <div class="settings-item" onclick="showModal('edit','Edit Profile','Profile editing coming in the next update!')">
+      <div class="settings-left">
+        <div class="settings-icon"><i class="ti ti-user-edit"></i></div>
+        <div>
+          <div class="settings-title">Edit Profile</div>
+          <div class="settings-sub">Update your information</div>
+        </div>
+      </div>
+      <i class="ti ti-chevron-right settings-arrow"></i>
+    </div>
+    
+    <div class="settings-item" onclick="showModal('password','Change Password','Password change coming in the next update!')">
+      <div class="settings-left">
+        <div class="settings-icon"><i class="ti ti-lock"></i></div>
+        <div>
+          <div class="settings-title">Change Password</div>
+          <div class="settings-sub">Update your password</div>
+        </div>
+      </div>
+      <i class="ti ti-chevron-right settings-arrow"></i>
+    </div>
+    
+    <div class="settings-item" onclick="confirmDeleteAccount()" style="border-bottom:none;">
+      <div class="settings-left">
+        <div class="settings-icon" style="background:#ffebee;color:#e53935;"><i class="ti ti-trash"></i></div>
+        <div>
+          <div class="settings-title" style="color:#e53935;">Delete Account</div>
+          <div class="settings-sub">Permanently delete your account</div>
+        </div>
+      </div>
+      <i class="ti ti-chevron-right settings-arrow"></i>
+    </div>
+  </div>
+</div>
+
+</div><!-- /phone -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-icon" id="modal-icon">ℹ️</div>
+    <div class="modal-title" id="modal-title">Title</div>
+    <div class="modal-text" id="modal-text">Message text goes here.</div>
+    <button class="modal-btn" onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">Message</div>
+
+<script>
+// ══════════════════════════════
+// NAVIGATION
+// ══════════════════════════════
+const screens = ['home','reports','new','notifs','profile','success','detail','settings'];
+let navigationHistory = ['home'];
+
+function goTo(id, sideBtn) {
+  // Track navigation history
+  if (navigationHistory[navigationHistory.length - 1] !== id) {
+    navigationHistory.push(id);
+  }
+  
+  // Hide all screens
+  screens.forEach(s => {
+    const el = document.getElementById('sc-'+s);
+    if(el) el.classList.remove('active');
+  });
+  
+  // Show target screen
+  const target = document.getElementById('sc-'+id);
+  if(target) target.classList.add('active');
+
+  // Update sidebar active state
+  document.querySelectorAll('.s-btn').forEach(b => {
+    b.classList.remove('active');
+    if (b.dataset.screen === id) b.classList.add('active');
+  });
+
+  // Update bottom nav active state for all screens
+  document.querySelectorAll('.bot-nav .b-btn').forEach(b => {
+    b.classList.remove('active');
+    if (b.dataset.screen === id) b.classList.add('active');
+  });
+}
+
+function goBack() {
+  navigationHistory.pop();
+  const previousScreen = navigationHistory[navigationHistory.length - 1] || 'home';
+  goTo(previousScreen);
+}
+
+// ══════════════════════════════
+// REPORT FORM
+// ══════════════════════════════
+let selectedPollutionType = null;
+let selectedImpact = null;
+
+function togglePill(btn) {
+  if (btn.dataset.value === 'more') {
+    showMoreTypes();
+    return;
+  }
+  document.querySelectorAll('#pollution-types .pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  selectedPollutionType = btn.dataset.value;
+  validateForm();
+}
+
+function toggleImpact(btn) {
+  document.querySelectorAll('#impact-btns .impact-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedImpact = btn.dataset.value;
+  validateForm();
+}
+
+function validateForm() {
+  const location = document.getElementById('location-inp').value.trim();
+  const submitBtn = document.getElementById('submit-btn');
+  
+  if (selectedPollutionType && selectedImpact && location) {
+    submitBtn.disabled = false;
+  } else {
+    submitBtn.disabled = true;
+  }
+}
+
+function showMoreTypes() {
+  showModal('types', 'More Pollution Types', 'Additional types:\n\n• Thermal Pollution\n• Radioactive Pollution\n• Plastic Pollution\n• Agricultural Pollution\n• Visual Pollution');
+}
+
+function useCurrentLocation() {
+  showToast('📍 Getting your location...');
+  setTimeout(() => {
+    document.getElementById('location-inp').value = 'Bgry. Sagong Siang, Caloocan';
+    showToast('✓ Location set');
+    validateForm();
+  }, 1000);
+}
+
+function uploadPhoto() {
+  showToast('📷 Photo upload coming soon!');
+}
+
+function submitReport() {
+  if (!selectedPollutionType || !selectedImpact) {
+    showToast('⚠️ Please fill all required fields');
+    return;
+  }
+  
+  const location = document.getElementById('location-inp').value.trim();
+  if (!location) {
+    showToast('⚠️ Please enter a location');
+    return;
+  }
+  
+  // Show success screen
+  goTo('success');
+  
+  // Reset form
+  selectedPollutionType = null;
+  selectedImpact = null;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.impact-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.form-inp').forEach(i => i.value = '');
+  
+  // Update stats
+  updateStats();
+}
+
+function updateStats() {
+  const pending = parseInt(document.getElementById('home-pending').textContent) + 1;
+  document.getElementById('home-pending').textContent = pending;
+  document.getElementById('stat-pending').textContent = pending + 2;
+  document.getElementById('stat-total').textContent = parseInt(document.getElementById('stat-total').textContent) + 1;
+}
+
+// ══════════════════════════════
+// REPORTS FILTERING & SORTING
+// ══════════════════════════════
+function filterReports(q) {
+  const cards = document.querySelectorAll('#reports-list .r-card');
+  cards.forEach(c => {
+    const text = c.innerText.toLowerCase();
+    c.style.display = text.includes(q.toLowerCase()) ? 'flex' : 'none';
+  });
+}
+
+function filterReportsByStatus(status) {
+  const cards = document.querySelectorAll('#reports-list .r-card');
+  cards.forEach(c => {
+    if (status === 'all' || c.dataset.status === status) {
+      c.style.display = 'flex';
+    } else {
+      c.style.display = 'none';
+    }
+  });
+  showToast(Showing ${status === 'all' ? 'all' : status} reports);
+}
+
+function filterByStatus(status) {
+  goTo('reports');
+  setTimeout(() => filterReportsByStatus(status), 100);
+}
+
+function toggleSortMenu() {
+  showToast('Sort options: Newest, Oldest, Status');
+}
+
+// ══════════════════════════════
+// NOTIFICATIONS
+// ══════════════════════════════
+function filterNotif(status, btn) {
+  document.querySelectorAll('.filter-row .f-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#notif-list .notif-item').forEach(item => {
+    if (status === 'all' || item.dataset.status === status) {
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+function showNotifOptions() {
+  showModal('notif', 'Options', 'Mark as read\nDelete notification\nTurn off notifications for this type');
+}
+
+// ══════════════════════════════
+// REPORT DETAIL
+// ══════════════════════════════
+const reportData = [
+  {
+    type: 'Water Pollution',
+    icon: '💧',
+    iconBg: '#e3f2fd',
+    status: 'pending',
+    badge: 'Pending',
+    badgeClass: 'b-pending',
+    location: 'Blk 2, Bgry. Sagong Siang, Caloocan',
+    impact: 'Medium',
+    time: '6 hours ago',
+    desc: 'Industrial waste discharge observed in the river. The water has turned murky with visible oil slicks on the surface.',
+    timeline: [
+      { icon: '📝', text: 'Report submitted', time: 'June 16, 2026 · 4:30 AM' }
+    ]
+  },
+  {
+    type: 'Land Pollution',
+    icon: '🌴',
+    iconBg: '#e8f5e9',
+    status: 'progress',
+    badge: 'Progress',
+    badgeClass: 'b-progress',
+    location: 'Blk 2, Bgry. Sagong Siang, Caloocan',
+    impact: 'Medium',
+    time: '2 hours ago',
+    desc: 'Illegal dumping site discovered with construction debris and household waste piling up.',
+    timeline: [
+      { icon: '📝', text: 'Report submitted', time: 'June 16, 2026 · 8:30 AM' },
+      { icon: '👀', text: 'Under review', time: 'June 16, 2026 · 9:00 AM' },
+      { icon: '🔧', text: 'Team dispatched', time: 'June 16, 2026 · 10:00 AM', active: true }
+    ]
+  },
+  {
+    type: 'Land Pollution',
+    icon: '🌴',
+    iconBg: '#e8f5e9',
+    status: 'resolved',
+    badge: 'Resolved',
+    badgeClass: 'b-resolved',
+    location: 'Blk 2, Bgry. Sagong Siang, Caloocan',
+    impact: 'Medium',
+    time: '1 day ago',
+    desc: 'Construction debris blocking drainage system has been cleared and properly disposed.',
+    timeline: [
+      { icon: '📝', text: 'Report submitted', time: 'June 14, 2026 · 2:30 PM' },
+      { icon: '👀', text: 'Under review', time: 'June 14, 2026 · 4:15 PM' },
+      { icon: '🔧', text: 'Team dispatched', time: 'June 15, 2026 · 9:00 AM' },
+      { icon: '✅', text: 'Issue resolved', time: 'June 15, 2026 · 4:00 PM', active: true }
+    ]
+  },
+  {
+    type: 'Air Pollution',
+    icon: '💨',
+    iconBg: '#fff8e1',
+    status: 'pending',
+    badge: 'Pending',
+    badgeClass: 'b-pending',
+    location: 'Blk 2, Bgry. Sagong Siang, Caloocan',
+    impact: 'High',
+    time: '1 day ago',
+    desc: 'Factory emissions causing thick smoke and unpleasant odor in the residential area.',
+    timeline: [
+      { icon: '📝', text: 'Report submitted', time: 'June 15, 2026 · 10:30 AM' }
+    ]
+  },
+  {
+    type: 'Water Pollution',
+    icon: '💧',
+    iconBg: '#e3f2fd',
+    status: 'resolved',
+    badge: 'Resolved',
+    badgeClass: 'b-resolved',
+    location: 'Blk 2, Bgry. Sagong Siang, Caloocan',
+    impact: 'Low',
+    time: '2 days ago',
+    desc: 'Minor oil spill in the river has been contained and cleaned up.',
+    timeline: [
+      { icon: '📝', text: 'Report submitted', time: 'June 13, 2026 · 8:00 AM' },
+      { icon: '👀', text: 'Under review', time: 'June 13, 2026 · 9:30 AM' },
+      { icon: '🔧', text: 'Cleanup initiated', time: 'June 13, 2026 · 2:00 PM' },
+      { icon: '✅', text: 'Issue resolved', time: 'June 14, 2026 · 11:00 AM', active: true }
+    ]
+  }
+];
+
+function showReportDetail(index) {
+  const report = reportData[index] || reportData[0];
+  
+  document.getElementById('detail-title').textContent = report.type;
+  document.getElementById('detail-icon').textContent = report.icon;
+  document.getElementById('detail-icon').style.background = report.iconBg;
+  document.getElementById('detail-badge').textContent = report.badge;
+  document.getElementById('detail-badge').className = 'badge detail-badge ' + report.badgeClass;
+  document.getElementById('detail-location').textContent = report.location;
+  document.getElementById('detail-impact').textContent = report.impact;
+  document.getElementById('detail-time').textContent = report.time;
+  document.getElementById('detail-desc').textContent = report.desc;
+  
+  // Build timeline
+  let timelineHTML = '';
+  report.timeline.forEach((item, i) => {
+    const isLast = i === report.timeline.length - 1;
+    timelineHTML += 
+      <div class="timeline-item">
+        <div class="timeline-dot" ${item.active ? 'style="border-color:#2563eb;"' : ''}>${item.icon}</div>
+        <div>
+          <div class="timeline-text" ${item.active ? 'style="font-weight:600;color:#2563eb;"' : ''}>${item.text}</div>
+          <div class="timeline-time">${item.time}</div>
+        </div>
+      </div>
+    ;
+  });
+  document.getElementById('detail-timeline').innerHTML = timelineHTML;
+  
+  goTo('detail');
+}
+
+function showReportOptions() {
+  showModal('options', 'Report Options', 'Edit Report\nDelete Report\nShare Report\nDownload PDF');
+}
+
+function shareReport() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'EcoWatch Report',
+      text: 'Check out this pollution report on EcoWatch',
+      url: window.location.href
+    });
+  } else {
+    showToast('📋 Report link copied to clipboard!');
+  }
+}
+
+// ══════════════════════════════
+// MAP FUNCTIONS
+// ══════════════════════════════
+function locateUser() {
+  showToast('📍 Finding your location...');
+  setTimeout(() => {
+    showToast('✓ Location found: Cogon, Bogo City');
+  }, 1500);
+}
+
+// ══════════════════════════════
+// PROFILE FUNCTIONS
+// ══════════════════════════════
+function editAvatar() {
+  showToast('📷 Avatar editing coming soon!');
+}
+
+function showAchievement(title, desc) {
+  showModal('achievement', title, desc);
+}
+
+function confirmLogout() {
+  if (confirm('Are you sure you want to log out?')) {
+    showToast('👋 Logged out successfully');
+    setTimeout(() => goTo('home'), 1000);
+  }
+}
+
+function confirmDeleteAccount() {
+  if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+    showToast('Account deletion requested');
+  }
+}
+
+// ══════════════════════════════
+// SETTINGS FUNCTIONS
+// ══════════════════════════════
+function toggleSwitch(el) {
+  el.classList.toggle('active');
+  const setting = el.id.replace('toggle-', '');
+  const state = el.classList.contains('active') ? 'enabled' : 'disabled';
+  showToast(${setting.charAt(0).toUpperCase() + setting.slice(1)} ${state});
+}
+
+function showLanguageOptions() {
+  showModal('language', 'Select Language', 'English (Current)\nFilipino\nCebuano\nTagalog');
+}
+
+// ══════════════════════════════
+// MODAL & TOAST
+// ══════════════════════════════
+function showModal(type, title, text) {
+  const icons = {
+    success: '✅',
+    error: '❌',
+    warning: '⚠️',
+    info: 'ℹ️',
+    achievement: '🏆',
+    help: '❓',
+    about: '📱',
+    types: '📋',
+    notif: '⚙️',
+    options: '⚙️',
+    language: '🌐',
+    edit: '✏️',
+    password: '🔐'
+  };
+  
+  document.getElementById('modal-icon').textContent = icons[type] || 'ℹ️';
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-text').textContent = text;
+  document.getElementById('modal-overlay').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+}
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ══════════════════════════════
+// INITIALIZATION
+// ══════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  // Add input listener for form validation
+  document.getElementById('location-inp')?.addEventListener('input', validateForm);
+  
+  // Initialize submit button as disabled
+  const submitBtn = document.getElementById('submit-btn');
+  if (submitBtn) submitBtn.disabled = true;
+  
+  // Set greeting based on time
+  const hour = new Date().getHours();
+  let greeting = 'Good morning';
+  if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
+  else if (hour >= 17) greeting = 'Good evening';
+  
+  const greetingEl = document.querySelector('.g-header div div:first-child');
+  if (greetingEl && greetingEl.textContent.includes('morning')) {
+    greetingEl.textContent = greeting + ',';
+  }
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeModal();
+  }
+});
+</script>
 </body>
 </html>
+``
