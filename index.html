@@ -3,184 +3,353 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EcoWatch</title>
+<title>EcoWatch — Community Pollution Reporter</title>
 
 <style>
-:root{
-  --green-dark:#1b5e3b;
-  --green-mid:#2e7d52;
-  --green-light:#e8f5e9;
-  --text:#111;
-  --white:#fff;
-  --border:#e5e5e5;
+:root {
+    --green-dark: #1b5e3b;
+    --green-mid: #2e7d52;
+    --green-pale: #f0f7f0;
+    --blue: #2563eb;
 }
 
 /* RESET */
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-
-body{
-  background:#f5f7f6;
-  display:flex;
-  min-height:100vh;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* SIDEBAR */
-.sidebar{
-  width:260px;
-  background:var(--green-dark);
-  color:#fff;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
+body {
+    font-family: Arial, sans-serif;
+    background: var(--green-pale);
+    height: 100vh;
 }
 
-.sidebar button{
-  background:none;
-  border:none;
-  color:#fff;
-  padding:12px;
-  text-align:left;
-  cursor:pointer;
-  border-radius:8px;
+/* =========================
+   MAIN LAYOUT
+========================= */
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
 }
 
-.sidebar button:hover,
-.sidebar button.active{
-  background:rgba(255,255,255,0.2);
+/* =========================
+   SIDEBAR
+========================= */
+.desktop-sidebar {
+    width: 280px;
+    background: var(--green-dark);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
 }
 
-/* APP WRAPPER */
-.app{
-  flex:1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:10px;
+.sidebar-logo {
+    font-size: 18px;
+    font-weight: bold;
 }
 
-/* PHONE / MAIN PANEL */
-.phone{
-  width:420px;
-  height:90vh;
-  background:#fff;
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,0.2);
-  display:flex;
-  flex-direction:column;
-  resize:horizontal;
+.sidebar-logo span {
+    display: block;
+    font-size: 11px;
+    opacity: 0.7;
 }
 
-/* SCREENS */
-.screen{
-  display:none;
-  flex:1;
-  padding:20px;
-  overflow:auto;
+.sidebar-user {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 10px;
 }
 
-.screen.active{
-  display:block;
+.sidebar-nav {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-/* HEADER */
-.header{
-  background:var(--green-dark);
-  color:white;
-  padding:15px;
-  font-weight:bold;
+.sidebar-nav-item {
+    padding: 10px;
+    background: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
-/* BUTTON */
-.btn{
-  padding:10px;
-  margin-top:10px;
-  border:none;
-  background:var(--green-mid);
-  color:white;
-  border-radius:8px;
-  cursor:pointer;
+.sidebar-nav-item:hover,
+.sidebar-nav-item.active {
+    background: rgba(255,255,255,0.15);
 }
 
-/* RESPONSIVE (LIKE GITHUB STYLE) */
-@media(max-width:900px){
-  body{
-    flex-direction:column;
-  }
+.sidebar-footer {
+    margin-top: auto;
+    font-size: 11px;
+    opacity: 0.6;
+}
 
-  .sidebar{
-    width:100%;
-    flex-direction:row;
-    overflow-x:auto;
-  }
+/* =========================
+   RESIZABLE AREA (FIXED)
+========================= */
+.resizable-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
 
-  .sidebar button{
-    flex:1;
-    text-align:center;
-  }
+/* 🔥 FIX: REAL RESPONSIVE RESIZABLE PHONE */
+.phone-shell {
+    width: clamp(320px, 30vw, 420px); /* RESPONSIVE RESIZE MAGIC */
+    height: 90vh;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
-  .phone{
-    width:100%;
-    height:100vh;
-    border-radius:0;
-  }
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+    /* IMPORTANT FOR RESIZE FEEL */
+    min-width: 320px;
+    max-width: 100%;
+}
+
+/* =========================
+   HEADER
+========================= */
+.top-header {
+    background: var(--green-dark);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* =========================
+   MAP
+========================= */
+.map-box {
+    margin: 10px;
+    height: 180px;
+    background: #c8e6c9;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.map-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(to right, rgba(255,255,255,0.3) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.3) 1px, transparent 1px);
+    background-size: 30px 30px;
+}
+
+.map-pin {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    position: absolute;
+}
+
+/* =========================
+   STATS
+========================= */
+.home-stats {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+}
+
+.stat-card {
+    flex: 1;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.stat-num {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* =========================
+   REPORTS
+========================= */
+.report-card {
+    display: flex;
+    gap: 10px;
+    margin: 10px;
+    padding: 10px;
+    background: white;
+    border-radius: 10px;
+}
+
+.report-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--blue);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =========================
+   BOTTOM NAV
+========================= */
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    border-top: 1px solid #eee;
+    margin-top: auto;
+}
+
+.nav-item,
+.nav-fab {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-item.active {
+    color: var(--green-dark);
+}
+
+.nav-fab {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--green-dark);
+    color: white;
+}
+
+/* =========================
+   MOBILE RESPONSIVE (IMPORTANT FIX)
+========================= */
+@media (max-width: 900px) {
+
+    .app-container {
+        flex-direction: column;
+    }
+
+    .desktop-sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .resizable-wrapper {
+        padding: 0;
+    }
+
+    .phone-shell {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        min-width: unset;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-  <button class="active" onclick="show('home')">Home</button>
-  <button onclick="show('reports')">Reports</button>
-  <button onclick="show('form')">New Report</button>
-  <button onclick="show('profile')">Profile</button>
-</div>
+<div class="app-container">
 
-<!-- APP -->
-<div class="app">
-  <div class="phone">
-
-    <!-- HOME -->
-    <div id="home" class="screen active">
-      <div class="header">Home</div>
-      <p>Welcome to EcoWatch</p>
-      <button class="btn" onclick="show('reports')">Go Reports</button>
+  <!-- SIDEBAR -->
+  <aside class="desktop-sidebar">
+    <div class="sidebar-logo">
+      🌿 EcoWatch
+      <span>Community Pollution Reporter</span>
     </div>
 
-    <!-- REPORTS -->
-    <div id="reports" class="screen">
-      <div class="header">Reports</div>
-      <p>List of reports here...</p>
-      <button class="btn" onclick="show('form')">Create Report</button>
+    <div class="sidebar-user">
+      <div>👤</div>
+      <div>
+        <div><b>Jake Montecillo</b></div>
+        <div style="font-size:11px;opacity:.7;">Cogon, Bogo City Cebu</div>
+      </div>
     </div>
 
-    <!-- FORM -->
-    <div id="form" class="screen">
-      <div class="header">New Report</div>
-      <input placeholder="Location" style="width:100%;padding:10px;margin-top:10px;">
-      <textarea placeholder="Description" style="width:100%;padding:10px;margin-top:10px;"></textarea>
-      <button class="btn" onclick="alert('Submitted!')">Submit</button>
-    </div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-nav-item active">Home</button>
+      <button class="sidebar-nav-item">Reports</button>
+      <button class="sidebar-nav-item">New Report</button>
+      <button class="sidebar-nav-item">Notifications</button>
+      <button class="sidebar-nav-item">Profile</button>
+    </nav>
 
-    <!-- PROFILE -->
-    <div id="profile" class="screen">
-      <div class="header">Profile</div>
-      <p>User Profile Page</p>
+    <div class="sidebar-footer">
+      EcoWatch v1.0 · Cebu
     </div>
+  </aside>
 
+  <!-- APP AREA -->
+  <div class="resizable-wrapper">
+    <div class="phone-shell">
+
+      <div class="top-header">
+        <div>
+          <div>Good morning</div>
+          <b>Jake</b>
+        </div>
+        <div>🔔 👤</div>
+      </div>
+
+      <div class="map-box">
+        <div class="map-grid"></div>
+        <div class="map-pin" style="top:40%;left:30%;background:red;"></div>
+        <div class="map-pin" style="top:60%;left:60%;background:orange;"></div>
+      </div>
+
+      <div class="home-stats">
+        <div class="stat-card"><div class="stat-num">1</div><div>Pending</div></div>
+        <div class="stat-card"><div class="stat-num">2</div><div>Review</div></div>
+        <div class="stat-card"><div class="stat-num">1</div><div>Done</div></div>
+      </div>
+
+      <div class="report-card">
+        <div class="report-icon">💧</div>
+        <div>
+          <b>Water Pollution</b>
+          <div style="font-size:12px;">Near river area</div>
+        </div>
+      </div>
+
+      <div class="report-card">
+        <div class="report-icon">🌿</div>
+        <div>
+          <b>Land Pollution</b>
+          <div style="font-size:12px;">Trash accumulation</div>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <button class="nav-item active">Home</button>
+        <button class="nav-item">Reports</button>
+        <button class="nav-fab">+</button>
+        <button class="nav-item">Notif</button>
+        <button class="nav-item">Profile</button>
+      </div>
+
+    </div>
   </div>
+
 </div>
-
-<script>
-function show(id){
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-
-  document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
-}
-</script>
 
 </body>
 </html>
