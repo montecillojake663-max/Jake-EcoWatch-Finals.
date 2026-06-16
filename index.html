@@ -8,8 +8,9 @@
 <style>
 :root{
   --green:#1b5e3b;
-  --bg:#eef2ef;
+  --bg:#f0f7f0;
   --white:#fff;
+  --text:#111;
 }
 
 *{
@@ -23,80 +24,68 @@ body{
   background:var(--bg);
 }
 
-/* APP WRAPPER */
-.app{
+/* APP LAYOUT */
+.app-container{
   display:flex;
-  width:100%;
   height:100vh;
+  width:100%;
+  overflow:hidden;
 }
 
-/* SIDEBAR */
+/* SIDEBAR (DESKTOP) */
 .sidebar{
   width:260px;
   background:var(--green);
   color:white;
-  padding:15px;
   display:flex;
   flex-direction:column;
+  padding:20px;
 }
 
-.sidebar button{
+.sidebar h2{
+  margin-bottom:20px;
+}
+
+.menu-item{
   background:none;
   border:none;
   color:white;
-  padding:10px;
+  padding:12px;
   text-align:left;
   cursor:pointer;
-  border-radius:6px;
+  border-radius:8px;
 }
 
-.sidebar button:hover{
-  background:rgba(255,255,255,0.2);
+.menu-item:hover,
+.menu-item.active{
+  background:rgba(255,255,255,0.15);
 }
 
-/* MAIN AREA */
-.main{
+/* MAIN CONTENT */
+.main-content{
   flex:1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:10px;
-}
-
-/* APP CONTAINER (THIS RESIZES AUTOMATICALLY) */
-.app-window{
-  width:420px;
-  height:92vh;
-  background:white;
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 10px 30px rgba(0,0,0,0.2);
-  display:flex;
-  flex-direction:column;
+  padding:20px;
+  overflow:auto;
 }
 
 /* SCREENS */
 .screen{
   display:none;
-  flex:1;
-  overflow-y:auto;
 }
 
 .screen.active{
   display:block;
 }
 
-/* HEADER */
+/* SIMPLE UI */
 .header{
   background:var(--green);
   color:white;
   padding:15px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  border-radius:10px;
+  margin-bottom:10px;
 }
 
-/* BUTTONS */
 .btn{
   width:100%;
   padding:10px;
@@ -105,21 +94,12 @@ body{
   background:var(--green);
   color:white;
   cursor:pointer;
-  border-radius:6px;
+  border-radius:8px;
 }
 
-/* INPUT */
-input{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-}
-
-/* ================= RESPONSIVE ================= */
-
-/* TABLET */
+/* RESPONSIVE (TABLET + MOBILE) */
 @media(max-width:900px){
-  .app{
+  .app-container{
     flex-direction:column;
   }
 
@@ -129,100 +109,74 @@ input{
     overflow-x:auto;
   }
 
-  .main{
-    align-items:stretch;
-  }
-
-  .app-window{
-    width:100%;
-    height:100vh;
-    border-radius:0;
+  .menu-item{
+    white-space:nowrap;
   }
 }
 
-/* PHONE */
 @media(max-width:600px){
   .sidebar{
     display:none;
   }
 
-  .main{
+  .main-content{
     padding:0;
-  }
-
-  .app-window{
-    width:100%;
-    height:100vh;
-    border-radius:0;
   }
 }
 </style>
+
 </head>
 
 <body>
 
-<div class="app">
+<div class="app-container">
 
   <!-- SIDEBAR -->
   <div class="sidebar">
-    <h3>🌿 EcoWatch</h3>
-    <button onclick="show('home')">Home</button>
-    <button onclick="show('reports')">Reports</button>
-    <button onclick="show('form')">New Report</button>
-    <button onclick="show('notifications')">Notifications</button>
-    <button onclick="show('profile')">Profile</button>
+    <h2>🌿 EcoWatch</h2>
+
+    <button class="menu-item active" onclick="showScreen('home')">Home</button>
+    <button class="menu-item" onclick="showScreen('reports')">Reports</button>
+    <button class="menu-item" onclick="showScreen('form')">New Report</button>
+    <button class="menu-item" onclick="showScreen('notifications')">Notifications</button>
+    <button class="menu-item" onclick="showScreen('profile')">Profile</button>
   </div>
 
   <!-- MAIN -->
-  <div class="main">
+  <div class="main-content">
 
-    <div class="app-window">
+    <!-- HOME -->
+    <div class="screen active" id="screen-home">
+      <div class="header">Home</div>
+      <p>Welcome to EcoWatch</p>
+    </div>
 
-      <!-- HOME -->
-      <div class="screen active" id="home">
-        <div class="header">
-          <div>Home</div>
-          <button onclick="show('profile')">👤</button>
-        </div>
-        <div style="padding:15px">
-          <h3>Welcome to EcoWatch</h3>
-        </div>
-      </div>
+    <!-- REPORTS -->
+    <div class="screen" id="screen-reports">
+      <div class="header">Reports</div>
+      <p>No reports yet</p>
+    </div>
 
-      <!-- REPORTS -->
-      <div class="screen" id="reports">
-        <div class="header"><div>Reports</div></div>
-        <div style="padding:15px">No reports yet</div>
-      </div>
+    <!-- FORM -->
+    <div class="screen" id="screen-form">
+      <div class="header">New Report</div>
 
-      <!-- FORM -->
-      <div class="screen" id="form">
-        <div class="header"><div>New Report</div></div>
+      <input placeholder="Location" style="width:100%;padding:10px;margin-top:10px;">
+      <input placeholder="Description" style="width:100%;padding:10px;margin-top:10px;">
 
-        <div style="padding:15px">
-          <input placeholder="Location">
-          <input placeholder="Description">
+      <button class="btn" onclick="submitReport()">Submit</button>
+    </div>
 
-          <button class="btn" onclick="submitReport()">Submit</button>
-        </div>
-      </div>
+    <!-- NOTIFICATIONS -->
+    <div class="screen" id="screen-notifications">
+      <div class="header">Notifications</div>
+      <p>No notifications</p>
+    </div>
 
-      <!-- NOTIFICATIONS -->
-      <div class="screen" id="notifications">
-        <div class="header"><div>Notifications</div></div>
-        <div style="padding:15px">
-          <p>No new notifications</p>
-        </div>
-      </div>
-
-      <!-- PROFILE -->
-      <div class="screen" id="profile">
-        <div class="header"><div>Profile</div></div>
-        <div style="padding:15px">
-          <h3>User Profile</h3>
-        </div>
-      </div>
-
+    <!-- PROFILE -->
+    <div class="screen" id="screen-profile">
+      <div class="header">Profile</div>
+      <p>User Profile</p>
     </div>
 
   </div>
@@ -230,16 +184,21 @@ input{
 </div>
 
 <script>
-function show(id){
-  document.querySelectorAll('.screen')
-    .forEach(s=>s.classList.remove('active'));
+function showScreen(name){
 
-  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.screen')
+    .forEach(s => s.classList.remove('active'));
+
+  document.getElementById('screen-' + name)
+    .classList.add('active');
+
+  document.querySelectorAll('.menu-item')
+    .forEach(b => b.classList.remove('active'));
 }
 
 function submitReport(){
   alert("Report submitted!");
-  show('reports');
+  showScreen('reports');
 }
 </script>
 
